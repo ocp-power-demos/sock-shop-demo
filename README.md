@@ -27,6 +27,8 @@ Unless mentioned, each image is cross-compiled in s390x, amd64, arm64, and ppc64
 
 ### Deployment
 
+There are three diferent kustomizations: fyre, multi, multi-hpa. multi-hpa is a HoriztonalPodAutoScaler version where the front-end autoscales.
+
 *fyre* 
 
 To deploy to fyre, use the following:
