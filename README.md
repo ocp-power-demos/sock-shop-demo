@@ -129,6 +129,15 @@ The application looks like:
 
 ![socks-orders.png](socks-orders.png)
 
+### Development
+
+The following custom repos are used: 
+
+- front-end - https://github.com/ocp-power-demos/sock-shop-front-end
+- user - https://github.com/ocp-power-demos/sock-shop-user
+- orders - https://github.com/ocp-power-demos/sock-shop-orders
+
+
 ### Using
 
 Please login in via the https route to sock-shop and register a new user.
