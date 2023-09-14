@@ -1,0 +1,48 @@
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest as builder
+USER 0
+RUN dnf update -y
+
+# Original was https://github.com/microservices-demo/front-end
+
+RUN mkdir -p /src/ \
+    && cd /src/ \
+    && git clone https://github.com/ocp-power-demos/sock-shop-front-end \
+    && ls -al \
+    && mv sock-shop-front-end front-end \
+    && echo $(date)
+
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest
+ENV NODE_ENV "production"
+ENV PORT 8079
+EXPOSE 8079
+
+ENV	SERVICE_USER=myuser \
+	SERVICE_UID=10001 \
+	SERVICE_GROUP=mygroup \
+	SERVICE_GID=10001
+
+USER 0
+RUN dnf update -y \
+    && dnf install -y nc tzdata openssl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
+    && groupadd -r -g ${SERVICE_GID} ${SERVICE_GROUP} \
+    && useradd -r -u ${SERVICE_UID} -g ${SERVICE_GROUP} -m -d /home/${SERVICE_USER} -s /sbin/nologin ${SERVICE_USER}
+
+# Prepare app directory
+WORKDIR /usr/src/app
+COPY --from=builder /src/front-end/package.json /usr/src/app/
+COPY --from=builder /src/front-end/yarn.lock /usr/src/app/
+
+RUN mkdir -p /opt/app-root/src/.npm \
+    && npm config set strict-ssl false \
+    && npm install -g npm \
+    && npm install -g yarn@1.22.19 \
+    && chown -R myuser:mygroup /opt/app-root/src/ \
+    && chown -R myuser /usr/src/
+
+USER myuser
+RUN yarn install
+
+COPY --from=builder /src/front-end/ /usr/src/app
+
+# Start the app
+CMD ["/usr/bin/npm", "start"]

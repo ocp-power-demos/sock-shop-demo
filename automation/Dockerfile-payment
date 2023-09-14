@@ -1,0 +1,45 @@
+FROM registry.access.redhat.com/ubi9/go-toolset:latest as builder
+ENV sourcesdir /go/src/github.com/microservices-demo/payment/
+
+USER 0
+RUN mkdir -p /go/src/github.com/microservices-demo/ \
+    && cd /go/src/github.com/microservices-demo/ \
+    && git clone https://github.com/microservices-demo/payment.git \
+    && go install github.com/FiloSottile/gvt@latest \
+    && cd /go/src/github.com/microservices-demo/payment && /opt/app-root/src/go/bin/gvt restore \
+    && go mod init github.com/microservices-demo/payment \
+    && go mod tidy
+
+# Decided to split the steps here to avoid rebuilding/cloning needlessly.
+
+RUN cd /go/src/github.com/microservices-demo/payment \
+    && CGO_ENABLED=0 GOOS=linux go build -mod=readonly -a -installsuffix cgo -o /app github.com/microservices-demo/payment/cmd/paymentsvc
+USER 1001
+
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+ENV	SERVICE_USER=myuser \
+	SERVICE_UID=10001 \
+	SERVICE_GROUP=mygroup \
+	SERVICE_GID=10001
+
+RUN microdnf update -y \
+    && microdnf install -y nc tzdata openssl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
+    && groupadd -r -g ${SERVICE_GID} ${SERVICE_GROUP} \
+    && useradd -r -u ${SERVICE_UID} -g ${SERVICE_GROUP} -m -d /home/${SERVICE_USER} -s /sbin/nologin ${SERVICE_USER}
+
+ENV HATEAOS user
+ENV USER_DATABASE mongodb
+ENV MONGO_HOST user-db
+
+WORKDIR /
+EXPOSE 8080
+RUN	mkdir -p /payment
+COPY --from=builder /app /payment
+
+RUN	chmod +x /payment/app && \
+	chown -R ${SERVICE_USER}:${SERVICE_GROUP} /payment/app
+
+USER ${SERVICE_USER}
+
+CMD ["/payment/app", "-port=8080"]

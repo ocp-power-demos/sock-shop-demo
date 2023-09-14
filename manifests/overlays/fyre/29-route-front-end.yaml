@@ -1,0 +1,19 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: sock-shop
+  namespace: sock-shop
+  labels:
+    service: front-end
+spec:
+  subdomain: sock-shop
+  to:
+    kind: Service
+    name: front-end
+    weight: 100
+  port:
+    targetPort: '8079' 
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: None
+  wildcardPolicy: None

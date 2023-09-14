@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carts
+  labels:
+    name: carts
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: carts
+  template:
+    metadata:
+      labels:
+        name: carts
+    spec:
+      containers:
+        - name: carts
+          image: quay.io/cbade_cs/openshift-demo:sock-shop-carts
+          imagePullPolicy: Always #IfNotPresent
+          command: [ "/usr/bin/java" ]
+          args: [ "-cp", "/opt/app.jar", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
+          env:
+            - name: JAVA_OPTS
+              value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
+          resources:
+            limits:
+              cpu: 300m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          ports:
+            - containerPort: 80
+          securityContext:
+            runAsNonRoot: true
+            # runAsUser: 10001
+            capabilities:
+              drop:
+                - all
+              add:
+                - NET_BIND_SERVICE
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: carts-vol
+      volumes:
+        - name: carts-vol
+          emptyDir:
+            medium: Memory
+      nodeSelector:
+        node.openshift.io/os_id: rhcos

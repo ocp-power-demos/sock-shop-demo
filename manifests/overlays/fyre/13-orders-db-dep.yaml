@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-db
+  labels:
+    name: orders-db
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: orders-db
+  template:
+    metadata:
+      labels:
+        name: orders-db
+    spec:
+      containers:
+        - name: orders-db
+          image: mongo
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongo
+              containerPort: 27017
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: orders-db-temp-vol
+            - mountPath: /data/db
+              name: orders-db-vol
+      volumes:
+        - name: orders-db-vol
+          emptyDir:
+            medium: Memory
+        - name: orders-db-temp-vol
+          emptyDir:
+            medium: Memory
+      nodeSelector:
+        node.openshift.io/os_id: rhcos

@@ -1,0 +1,15 @@
+FROM registry.access.redhat.com/ubi9/go-toolset:latest as builder
+
+ENV sourcesdir /go/src/github.com/microservices-demo/catalogue/
+
+USER 0
+
+RUN mkdir -p /go/src/github.com/microservices-demo/ \
+    && cd /go/src/github.com/microservices-demo/ \
+    && git clone https://github.com/microservices-demo/catalogue.git
+
+FROM docker.io/library/mariadb:11.0.2
+
+ENV MARIADB_DATABASE=socksdb
+
+COPY --from=builder /go/src/github.com/microservices-demo/catalogue/docker/catalogue-db/data/dump.sql /docker-entrypoint-initdb.d/

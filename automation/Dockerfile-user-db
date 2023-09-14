@@ -1,0 +1,32 @@
+FROM registry.access.redhat.com/ubi9/go-toolset:latest as builder
+ENV sourcesdir /go/src/github.com/microservices-demo/user/
+ENV MONGO_HOST mytestdb:27017
+ENV HATEAOS user
+ENV USER_DATABASE mongodb
+
+USER 0
+RUN mkdir -p /go/src/github.com/microservices-demo/ \
+    && cd /go/src/github.com/microservices-demo/ \
+    && git clone https://github.com/microservices-demo/user.git
+
+FROM docker.io/library/mongo:3
+COPY --from=builder /go/src/github.com/microservices-demo/user/docker/user-db/scripts /docker-entrypoint-initdb.d/
+
+ADD files/mongodb.conf /etc
+ADD files/cleanup-users-init.sh /bin
+
+# Modify child mongo to use /data/db-accounts as dbpath (because /data/db wont persist the build because it is already a VOLUME)
+RUN mkdir -p /data/db-users \
+    && chown -R mongodb:mongodb /data/db-users \
+    && mkdir -p /logs \
+    && chown -R mongodb:mongodb /logs \
+    && rm -f /docker-entrypoint-initdb.d/mongo_create_insert.sh \
+    && chmod +x /bin/cleanup-users-init.sh \
+    && bash /bin/cleanup-users-init.sh
+
+USER mongodb
+
+# Make the new dir a VOLUME to persist it
+VOLUME /data/db-users
+
+CMD ["mongod", "--config", "/etc/mongodb.conf", "--smallfiles"]

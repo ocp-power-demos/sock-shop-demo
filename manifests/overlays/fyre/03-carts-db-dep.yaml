@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carts-db
+  labels:
+    name: carts-db
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: carts-db
+  template:
+    metadata:
+      labels:
+        name: carts-db
+    spec:
+      containers:
+        - name: carts-db
+          image: mongo
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongo
+              containerPort: 27017
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: carts-db-temp-vol
+            - mountPath: /data/db
+              name: carts-db-vol
+      volumes:
+        - name: carts-db-temp-vol
+          emptyDir:
+            medium: Memory
+        - name: carts-db-vol
+          emptyDir:
+            medium: Memory
+      nodeSelector:
+        node.openshift.io/os_id: rhcos

@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: sock-shop
+  namespace: sock-shop
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+sortOptions:
+  order: fifo
+
+resources:
+  - 00-sock-shop-ns.yaml
+  - 01-carts-dep.yaml
+  - 02-carts-svc.yaml
+  - 03-carts-db-dep.yaml
+  - 04-carts-db-svc.yaml
+  - 05-catalogue-dep.yaml
+  - 06-catalogue-svc.yaml
+  - 07-catalogue-db-dep.yaml
+  - 08-catalogue-db-svc.yaml
+  - 09-front-end-dep.yaml
+  - 10-front-end-svc.yaml
+  - 11-orders-dep.yaml
+  - 12-orders-svc.yaml
+  - 13-orders-db-dep.yaml
+  - 14-orders-db-svc.yaml
+  - 15-payment-dep.yaml
+  - 16-payment-svc.yaml
+  - 17-queue-master-dep.yaml
+  - 18-queue-master-svc.yaml
+  - 19-rabbitmq-dep.yaml
+  - 20-rabbitmq-svc.yaml
+  - 21-session-db-dep.yaml
+  - 22-session-db-svc.yaml
+  - 23-shipping-dep.yaml
+  - 24-shipping-svc.yaml
+  - 25-user-dep.yaml
+  - 26-user-svc.yaml
+  - 27-user-db-dep.yaml
+  - 28-user-db-svc.yaml
+  - 29-route-front-end.yaml
+secretGenerator:
+  - name: mongodb-creds
+    namespace: sock-shop
+    envs:
+      - env.secret
+
+images:
+- name: kbudde/rabbitmq-exporter
+  newName: icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le 
+  newTag: 1.0.0-RC19
+- name: mongo
+  newName: icr.io/ppc64le-oss/mongodb-ppc64le 
+  newTag: 4.4.18 

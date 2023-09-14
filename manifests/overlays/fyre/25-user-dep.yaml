@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    name: user
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: user
+  template:
+    metadata:
+      labels:
+        name: user
+    spec:
+      containers:
+        - name: user
+          image: quay.io/cbade_cs/openshift-demo:sock-shop-user
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 300m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 8080
+          command: [ "/opt/user" ]
+          args: [ "-port=8080" , "-mongo-host=user-db:27017" ]
+          env:
+            - name: mongo
+              value: user-db:27017
+            - name: HATEAOS
+              value: user
+            - name: USER_DATABASE
+              value: mongodb
+              #- name: MONGO_HOST
+              #value: mongodb
+          securityContext:
+            runAsNonRoot: true
+            #privileged: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 300
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 180
+            periodSeconds: 3
+      nodeSelector:
+        node.openshift.io/os_id: rhcos

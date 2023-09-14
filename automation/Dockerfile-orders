@@ -1,0 +1,42 @@
+FROM registry.access.redhat.com/ubi9/openjdk-11:latest as builder
+
+USER 0
+RUN mkdir -p /src/ && cd /src/ \
+    && microdnf install -y git \
+    && git clone https://github.com/ocp-power-demos/sock-shop-orders \
+    && mv sock-shop-orders orders
+
+# Decided to split the steps here to avoid rebuilding/cloning needlessly.
+
+RUN cd /src/orders && mvn clean package -DskipTests && find . -iname '*.jar'
+
+USER 1001
+
+FROM registry.access.redhat.com/ubi9/openjdk-11:latest
+
+ENV	SERVICE_USER=myuser \
+	SERVICE_UID=10001 \
+	SERVICE_GROUP=mygroup \
+	SERVICE_GID=10001
+
+USER 0
+RUN microdnf update -y \
+    && microdnf install -y nc tzdata openssl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
+    && groupadd -r -g ${SERVICE_GID} ${SERVICE_GROUP} \
+    && useradd -r -u ${SERVICE_UID} -g ${SERVICE_GROUP} -m -d /home/${SERVICE_USER} -s /sbin/nologin ${SERVICE_USER}
+
+WORKDIR /
+EXPOSE 8080
+
+COPY --from=builder /src/orders/target/*.jar ./app.jar
+RUN	chown -R ${SERVICE_USER}:${SERVICE_GROUP} ./app.jar
+
+# Override a jaxb error as it's not included in JDK 11
+RUN mkdir -p /opt/lib \
+    && curl -L -o /opt/lib/jaxb-api-2.3.1.jar https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar \
+    && curl -L -o /opt/lib/jaxb-runtime-3.0.1.redhat-00001.jar https://maven.repository.redhat.com/ga/org/glassfish/jaxb/jaxb-runtime/3.0.1.redhat-00001/jaxb-runtime-3.0.1.redhat-00001.jar \
+    && chmod 755 /opt/lib/*.jar
+
+USER ${SERVICE_USER}
+
+ENTRYPOINT ["/usr/bin/java","-jar","/app.jar", "--port=8080"]

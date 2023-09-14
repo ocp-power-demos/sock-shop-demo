@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-db
+  labels:
+    name: catalogue-db
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: catalogue-db
+  template:
+    metadata:
+      labels:
+        name: catalogue-db
+    spec:
+      containers:
+        - name: catalogue-db
+          image: weaveworksdemos/catalogue-db:0.3.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds
+                  key: password
+            - name: MYSQL_DATABASE
+              value: socksdb
+              #valueFrom:
+              #secretKeyRef:
+              #   name: mongodb-creds
+              #   key: password
+          ports:
+            - name: mysql
+              containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: catalogue-data
+          securityContext:
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: catalogue-data
+          emptyDir:
+            medium: Memory
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        node.openshift.io/os_id: rhcos

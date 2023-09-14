@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-master
+  labels:
+    name: queue-master
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: queue-master
+  template:
+    metadata:
+      labels:
+        name: queue-master
+    spec:
+      containers:
+        - name: queue-master
+          image: quay.io/cbade_cs/openshift-demo:sock-shop-queue-master
+          imagePullPolicy: IfNotPresent
+          command: [ "/usr/bin/java" ]
+          args: [ "-cp", "/opt/app.jar", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
+          env:
+            - name: JAVA_OPTS
+              value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
+          resources:
+            limits:
+              cpu: 300m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 300Mi
+          ports:
+            - containerPort: 8080
+      nodeSelector:
+        node.openshift.io/os_id: rhcos
