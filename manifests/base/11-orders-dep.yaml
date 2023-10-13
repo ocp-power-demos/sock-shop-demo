@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: orders
-          image: quay.io/cbade_cs/openshift-demo:sock-shop-orders
+          image: quay.io/powercloud/sock-shop-orders:latest
           imagePullPolicy: Always
           command: [ "/usr/bin/java" ]
           args: [ "-cp", "/app.jar", "-Xms64m", "-Xmx128m", "-XX:+UseG1GC", "-Djava.security.egd=file:/dev/urandom", "-Dspring.zipkin.enabled=false", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]

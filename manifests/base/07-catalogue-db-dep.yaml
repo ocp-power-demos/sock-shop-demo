@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: catalogue-db
-          image: quay.io/cbade_cs/openshift-demo:sock-shop-catalogue-db
+          image: quay.io/powercloud/sock-shop-catalogue-db:latest
           imagePullPolicy: Always
           env:
             - name: MARIADB_ROOT_PASSWORD
