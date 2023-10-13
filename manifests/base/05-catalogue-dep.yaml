@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: catalogue
-          image: quay.io/cbade_cs/openshift-demo:sock-shop-catalogue
+          image: quay.io/powercloud/sock-shop-catalogue:latest
           imagePullPolicy: Always
           command: [ "/opt/app" ]
           args:

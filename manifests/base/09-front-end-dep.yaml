@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: front-end
-          image: quay.io/cbade_cs/openshift-demo:sock-shop-front-end
+          image: quay.io/powercloud/sock-shop-front-end:latest
           imagePullPolicy: Always
           command: [ "/usr/bin/npm" ]
           args: [ "start" ]
