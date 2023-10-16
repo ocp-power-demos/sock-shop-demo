@@ -5,7 +5,7 @@ ARCH ?= ppc64le
 APP ?= phony
 
 # If absent, registry defaults
-REGISTRY ?= quay.io/cbade_cs/openshift-demo
+REGISTRY ?= quay.io/powercloud 
 ARM_REGISTRY ?= ${REGISTRY}
 
 verify-environment:
@@ -16,61 +16,61 @@ verify-environment:
 
 cross-build-user: verify-environment
 	+@echo "Building Image - 'user'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:user-${ARCH} -f automation/Dockerfile-user
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-user:${ARCH} -f automation/Dockerfile-user
 	+@echo "Done Image - 'user'"
 .PHONY: cross-build-user
 
 cross-build-user-db: verify-environment
 	+@echo "Building Image - 'user-db'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:user-db-${ARCH} -f automation/Dockerfile-user-db
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-user-db:${ARCH} -f automation/Dockerfile-user-db
 	+@echo "Done Image - 'user-db'"
 .PHONY: cross-build-user-db
 
 cross-build-front-end: verify-environment
 	+@echo "Building Image - 'front-end'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:front-end-${ARCH} -f automation/Dockerfile-front-end
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-front-end:${ARCH} -f automation/Dockerfile-front-end
 	+@echo "Done Image - 'front-end'"
 .PHONY: cross-build-front-end
 
 cross-build-payment: verify-environment
 	+@echo "Building Image - 'payment'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:payment-${ARCH} -f automation/Dockerfile-payment
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-payment:${ARCH} -f automation/Dockerfile-payment
 	+@echo "Done Image - 'payment'"
 .PHONY: cross-build-payment
 
 cross-build-orders: verify-environment
 	+@echo "Building Image - 'orders'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:orders-${ARCH} -f automation/Dockerfile-orders
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-orders:${ARCH} -f automation/Dockerfile-orders
 	+@echo "Done Image - 'orders'"
 .PHONY: cross-build-orders
 
 cross-build-catalogue: verify-environment
 	+@echo "Building Image - 'catalogue'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:catalogue-${ARCH} -f automation/Dockerfile-catalogue
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-catalogue:${ARCH} -f automation/Dockerfile-catalogue
 	+@echo "Done Image - 'catalogue'"
 .PHONY: cross-build-catalogue
 
 cross-build-catalogue-db: verify-environment
 	+@echo "Building Image - 'catalogue-db'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:catalogue-db-${ARCH} -f automation/Dockerfile-catalogue-db
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-catalogue-db:${ARCH} -f automation/Dockerfile-catalogue-db
 	+@echo "Done Image - 'catalogue-db'"
 .PHONY: cross-build-catalogue-db
 
 cross-build-carts: verify-environment
 	+@echo "Building Image - 'carts'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:carts-${ARCH} -f automation/Dockerfile-carts
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-carts:${ARCH} -f automation/Dockerfile-carts
 	+@echo "Done Image - 'carts'"
 .PHONY: cross-build-carts
 
 cross-build-shipping: verify-environment
 	+@echo "Building Image - 'shipping'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:shipping-${ARCH} -f automation/Dockerfile-shipping
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-shipping:${ARCH} -f automation/Dockerfile-shipping
 	+@echo "Done Image - 'shipping'"
 .PHONY: cross-build-shipping
 
 cross-build-queue-master: verify-environment
 	+@echo "Building Image - 'queue-master'"
-	+@podman build --platform linux/${ARCH} -t ${REGISTRY}:queue-master-${ARCH} -f automation/Dockerfile-queue-master
+	+@podman build --platform linux/${ARCH} -t ${REGISTRY}/sock-shop-queue-master:${ARCH} -f automation/Dockerfile-queue-master
 	+@echo "Done Image - 'queue-master'"
 .PHONY: cross-build-queue-master
 
@@ -83,25 +83,25 @@ cross-build-other: cross-build-user cross-build-front-end cross-build-payment cr
 
 # pushes the individual images
 push-all-ind: verify-environment
-	+@podman push ${REGISTRY}:carts-${ARCH}
-	+@podman push ${REGISTRY}:catalogue-${ARCH}
-	+@podman push ${REGISTRY}:front-end-${ARCH}
-	+@podman push ${REGISTRY}:orders-${ARCH}
-	+@podman push ${REGISTRY}:payment-${ARCH}
-	+@podman push ${REGISTRY}:queue-master-${ARCH}
-	+@podman push ${REGISTRY}:user-${ARCH}
-	+@podman push ${REGISTRY}:shipping-${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-carts:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-catalogue:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-front-end:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-orders:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-payment:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-queue-master:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-user:${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-shipping:${ARCH}
 .PHONY: push-all-ind
 
 push-catalogue-db: verify-environment
 	+@echo "push Image - 'catalogue-db'"
-	+@podman push ${REGISTRY}:catalogue-db-${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-catalogue-db:${ARCH}
 	+@echo "Done push Image - 'catalogue-db'"
 .PHONY: push-catalogue-db
 
 push-user-db: verify-environment
 	+@echo "push Image - 'user-db'"
-	+@podman push ${REGISTRY}:user-db-${ARCH}
+	+@podman push ${REGISTRY}/sock-shop-user-db:${ARCH}
 	+@echo "Done Image - 'user-db'"
 .PHONY: push-user-db
 
@@ -110,22 +110,22 @@ push-db: verify-environment push-catalogue-db push-user-db
 .PHONY: push-db
 
 pull-deps:
-	+@podman pull --platform linux/amd64 ${REGISTRY}:${APP}-amd64
-	+@podman pull --platform linux/s390x ${REGISTRY}:${APP}-s390x
-	+@podman pull --platform linux/arm64 ${ARM_REGISTRY}:${APP}-arm64
-	+@podman pull --platform linux/ppc64le ${REGISTRY}:${APP}-ppc64le
+	+@podman pull --platform linux/amd64 ${REGISTRY}/sock-shop-${APP}:amd64
+	+@podman pull --platform linux/s390x ${REGISTRY}/sock-shop-${APP}:s390x
+	+@podman pull --platform linux/arm64 ${ARM_REGISTRY}/sock-shop-${APP}:arm64
+	+@podman pull --platform linux/ppc64le ${REGISTRY}/sock-shop-${APP}:ppc64le
 .PHONY: pull-deps
 
 # Applies to all (except catalogue-db) - generate-and-push-manifest-list.
 push-ml: verify-environment pull-deps
 	+@echo "Remove existing manifest listed - ${APP}"
-	+@podman manifest rm ${REGISTRY}:sock-shop-${APP} || true
+	+@podman manifest rm ${REGISTRY}/sock-shop-${APP} || true
 	+@echo "Create new ML - ${APP}"
-	+@podman manifest create ${REGISTRY}:sock-shop-${APP} \
-		${REGISTRY}:${APP}-amd64 \
-		${REGISTRY}:${APP}-s390x \
-		${ARM_REGISTRY}:${APP}-arm64 \
-		${REGISTRY}:${APP}-ppc64le
+	+@podman manifest create ${REGISTRY}/sock-shop-${APP} \
+		${REGISTRY}/sock-shop-${APP}:amd64 \
+		${REGISTRY}/sock-shop-${APP}:s390x \
+		${ARM_REGISTRY}/sock-shop-${APP}:arm64 \
+		${REGISTRY}/sock-shop-${APP}:ppc64le
 	+@echo "Pushing image - ${APP}"
-	+@podman manifest push ${REGISTRY}:sock-shop-${APP} ${REGISTRY}:sock-shop-${APP}
+	+@podman manifest push ${REGISTRY}/sock-shop-${APP} ${REGISTRY}/sock-shop-${APP}
 .PHONY: push-ml
