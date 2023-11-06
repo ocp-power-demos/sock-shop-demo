@@ -93,7 +93,7 @@ Have fun and use it.
 
 ### Images
 
-The applications are compiled into images that are hosted at [quay.io/repository/cbade_cs/openshift-demo](https://quay.io/repository/cbade_cs/openshift-demo?tab=tags). There is a manifest-listed image for each application.
+The applications are compiled into images that are hosted at [quay.io/repository/powercloud](https://quay.io/repository/powercloud). There is a manifest-listed image for each application in the corresponding sock-shop repository.
 
 To build the images, use: 
 
@@ -101,7 +101,7 @@ To build the images, use:
 
 ```
 ARCH=amd64
-REGISTRY=quay.io/repository/cbade_cs/openshift-demo
+REGISTRY=quay.io/repository/powercloud/sock-shop-${APP}
 make cross-build-amd64
 ```
 
@@ -109,18 +109,19 @@ make cross-build-amd64
 
 ```
 ARCH=ppc64le
-REGISTRY=quay.io/repository/cbade_cs/openshift-demo
+REGISTRY=quay.io/repository/powercloud/sock-shop-${APP}
 make cross-build-amd64
 ```
 
 To push the manifest-listed images, use:
 
 ```
-REGISTRY=quay.io/repository/cbade_cs/openshift-demo
-ARM_REGISTRY=quay.io/repostiroy/pbastide_rh/openshift-demo
+REGISTRY=quay.io/repository/powercloud/sock-shop-${APP}
+ARM_REGISTRY=quay.io/repostiroy/powercloud/sock-shop-${APP}
 APP=front-end
 make push-ml
 ```
+### Diagrams
 
 The architecture is:
 
