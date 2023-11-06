@@ -131,6 +131,10 @@ The application looks like:
 
 ![socks-orders.png](socks-orders.png)
 
+The microservices interaction diagram is:
+![image](https://github.com/ocp-power-demos/sock-shop-demo/assets/3016328/ec62c687-5609-4264-bc10-82b2b2003185)
+
+
 ### Development
 
 The following custom repos are used: 
