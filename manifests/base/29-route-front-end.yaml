@@ -15,5 +15,5 @@ spec:
     targetPort: '8079' 
   tls:
     termination: edge
-    insecureEdgeTerminationPolicy: None
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
