@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    name: front-end
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8079
+  selector:
+    name: front-end
