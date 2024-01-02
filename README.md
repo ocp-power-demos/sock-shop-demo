@@ -15,8 +15,8 @@ The purpose of this application is to use a reference microservices demo to show
 2. [orders](https://github.com/microservices-demo/orders)
 3. [payment](https://github.com/microservices-demo/payment)
 4. [user](https://github.com/microservices-demo/user)
-*user-db* is Intel only.
-5. [catalogue](https://github.com/microservices-demo/catalogue) *catalogue-db* is Intel only.
+*user-db* is Intel only. The `power` overlay supports `ppc64le`.
+5. [catalogue](https://github.com/microservices-demo/catalogue) *catalogue-db* is Intel only. The `power` overlay supports `ppc64le`.
 6. [cart](https://github.com/microservices-demo/carts)
 7. [shipping](https://github.com/microservices-demo/shipping)
 8. [queue-master](https://github.com/microservices-demo/queue-master)
