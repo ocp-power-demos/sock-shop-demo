@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: catalogue-db
-          image: quay.io/powercloud/sock-shop-catalogue-db:latest
+          image: quay.io/powercloud/sock-shop-catalogue-db:ppc64le
           imagePullPolicy: Always
           env:
             - name: MARIADB_ROOT_PASSWORD
@@ -47,5 +47,5 @@ spec:
           emptyDir:
             medium: Memory
       nodeSelector:
-        kubernetes.io/arch: amd64
+        kubernetes.io/arch: ppc64le
         node.openshift.io/os_id: rhcos

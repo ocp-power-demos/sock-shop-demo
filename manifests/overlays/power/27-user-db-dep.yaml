@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-db
-          image: quay.io/powercloud/sock-shop-user-db:latest
+          image: quay.io/powercloud/sock-shop-user-db:ppc64le
           imagePullPolicy: Always
           ports:
             - name: mongo
@@ -37,4 +37,4 @@ spec:
             claimName: user-db-temp-pvc
       nodeSelector:
         node.openshift.io/os_id: rhcos
-        kubernetes.io/arch: amd64
+        kubernetes.io/arch: ppc64le
