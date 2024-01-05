@@ -10,6 +10,7 @@ sortOptions:
   order: fifo
 
 resources:
+  - 00-sock-shop-ns.yaml
   - 01-carts-dep.yaml
   - 02-carts-svc.yaml
   - 03-carts-db-temp-pvc.yaml

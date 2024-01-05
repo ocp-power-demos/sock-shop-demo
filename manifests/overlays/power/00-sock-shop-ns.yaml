@@ -1,0 +1,12 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  labels:
+    kubernetes.io/metadata.name: sock-shop
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/audit-version: v1.24
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/warn: privileged
+    pod-security.kubernetes.io/warn-version: v1.24
+    security.openshift.io/scc.podSecurityLabelSync: "false"
+  name: sock-shop

@@ -31,4 +31,4 @@ USER mongodb
 # Make the new dir a VOLUME to persist it
 VOLUME /data/db-users
 
-CMD ["mongod", "--config", "/etc/mongodb.conf", "--smallfiles"]
+CMD ["mongod", "--config", "/etc/mongodb.conf"]
