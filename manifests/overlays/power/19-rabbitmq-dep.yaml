@@ -29,7 +29,7 @@ spec:
           securityContext:
             readOnlyRootFilesystem: false
         - name: rabbitmq-exporter
-          image: kbudde/rabbitmq-exporter
+          image: icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le:1.0.0-RC19
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
