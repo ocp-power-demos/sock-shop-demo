@@ -57,6 +57,7 @@ spec:
           emptyDir:
             medium: Memory
       tolerations:
-        - operator: "Exists"
-          key: "intel-customer-test-user-4"
+        - operator: "Equal"
+          key: "kubernetes.io/arch"
+          value: "ppc64le"
           effect: "NoSchedule"
