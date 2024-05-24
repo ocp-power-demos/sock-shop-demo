@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carts-db
+  labels:
+    name: carts-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: carts-db
+  template:
+    metadata:
+      labels:
+        name: carts-db
+    spec:
+      containers:
+        - name: carts-db
+          image: quay.io/mongodb/mongodb:org-4.4-standalone-ubuntu2204
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongo
+              containerPort: 27017
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: carts-db-temp-vol
+            - mountPath: /data/db
+              name: carts-db-vol
+      volumes:
+        - name: carts-db-temp-vol
+          persistentVolumeClaim:
+            claimName: carts-db-temp-pvc
+        - name: carts-db-vol
+          emptyDir:
+            medium: Memory

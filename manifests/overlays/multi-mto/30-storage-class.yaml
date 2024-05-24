@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-client
+parameters:
+  archiveOnDelete: "false"
+provisioner: nfs-storage
+reclaimPolicy: Delete
+volumeBindingMode: Immediate

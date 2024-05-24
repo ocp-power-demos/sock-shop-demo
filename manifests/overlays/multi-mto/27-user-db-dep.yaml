@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-db
+  labels:
+    name: user-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: user-db
+  template:
+    metadata:
+      labels:
+        name: user-db
+    spec:
+      containers:
+        - name: user-db
+          image: quay.io/powercloud/sock-shop-user-db:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongo
+              containerPort: 27017
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: users-db-temp-vol
+            - mountPath: /data/db-users
+              name: users-db-vol
+      volumes:
+        - name: users-db-vol
+          emptyDir:
+            medium: Memory
+        - name: users-db-temp-vol
+          persistentVolumeClaim:
+            claimName: user-db-temp-pvc

@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  labels:
+    name: orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: orders
+  template:
+    metadata:
+      labels:
+        name: orders
+    spec:
+      containers:
+        - name: orders
+          image: quay.io/powercloud/sock-shop-orders:latest
+          imagePullPolicy: IfNotPresent
+          command: [ "/usr/bin/java" ]
+          args: [ "-cp", "/app.jar", "-Xms64m", "-Xmx128m", "-XX:+UseG1GC", "-Djava.security.egd=file:/dev/urandom", "-Dspring.zipkin.enabled=false", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 300Mi
+          ports:
+            - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-volume
+      volumes:
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory

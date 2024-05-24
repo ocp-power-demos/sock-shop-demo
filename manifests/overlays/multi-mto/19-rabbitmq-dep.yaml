@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  labels:
+    name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: rabbitmq
+  template:
+    metadata:
+      labels:
+        name: rabbitmq
+      annotations:
+        prometheus.io/scrape: "false"
+    spec:
+      containers:
+        - name: rabbitmq
+          image: quay.io/bitnami/rabbitmq:3.13.2-debian-12-r4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 15672
+              name: management
+            - containerPort: 5672
+              name: rabbitmq
+          securityContext:
+            readOnlyRootFilesystem: false
+        - name: rabbitmq-exporter
+          image: icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le:1.0.0-RC19
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+              name: exporter
