@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: orders-db
-          image: mongo:4
+          image: quay.io/mongodb/mongodb:org-4.4-standalone-ubuntu2204
           imagePullPolicy: IfNotPresent
           ports:
             - name: mongo

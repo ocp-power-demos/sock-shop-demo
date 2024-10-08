@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: quay.io/bitnami/rabbitmq:3.13.2-debian-12-r4
+          image: rabbitmq:3.11.19-management
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 15672

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: carts-db
-          image: mongo
+          image: quay.io/mongodb/mongodb:org-4.4-standalone-ubuntu2204
           imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
