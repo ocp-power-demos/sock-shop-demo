@@ -18,7 +18,7 @@ spec:
       containers:
         - name: shipping
           image: quay.io/powercloud/sock-shop-shipping:amd64
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/bin/java" ]
           args: [ "-cp", "/opt/app.jar", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
           env:

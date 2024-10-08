@@ -17,7 +17,7 @@ spec:
       containers:
         - name: user-db
           image: quay.io/powercloud/sock-shop-user-db:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
               containerPort: 27017

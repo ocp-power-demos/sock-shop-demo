@@ -19,7 +19,7 @@ spec:
       containers:
         - name: queue-master
           image: quay.io/powercloud/sock-shop-queue-master:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/bin/java" ]
           args: [ "-cp", "/opt/app.jar", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
           env:

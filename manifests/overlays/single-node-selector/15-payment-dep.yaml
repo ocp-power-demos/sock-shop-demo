@@ -18,7 +18,7 @@ spec:
       containers:
         - name: payment
           image: quay.io/powercloud/sock-shop-payment:amd64
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "/payment/app" ]
           args: [ "-port=8080" ]
           resources:

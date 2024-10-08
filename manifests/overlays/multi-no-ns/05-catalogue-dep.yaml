@@ -18,7 +18,7 @@ spec:
       containers:
         - name: catalogue
           image: quay.io/powercloud/sock-shop-catalogue:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "/opt/app" ]
           args:
             - -port=8080

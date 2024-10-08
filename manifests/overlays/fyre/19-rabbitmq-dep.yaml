@@ -30,8 +30,7 @@ spec:
           securityContext:
             readOnlyRootFilesystem: false
         - name: rabbitmq-exporter
-          # rabbitmq-exporter	1.0.0-RC19	podman pull icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le:1.0.0-RC19
-          image: kbudde/rabbitmq-exporter
+          image: ghcr.io/kbudde/rabbitmq_exporter:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090

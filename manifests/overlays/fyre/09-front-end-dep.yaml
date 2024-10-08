@@ -17,7 +17,7 @@ spec:
       containers:
         - name: front-end
           image: quay.io/cbade_cs/openshift-demo:sock-shop-front-end
-          imagePullPolicy: Always #IfNotPresent
+          imagePullPolicy: IfNotPresent #IfNotPresent
           command: [ "/usr/bin/npm" ]
           args: [ "start" ]
           resources:

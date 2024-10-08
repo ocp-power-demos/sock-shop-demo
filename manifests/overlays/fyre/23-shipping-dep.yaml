@@ -19,7 +19,7 @@ spec:
       containers:
         - name: shipping
           image: quay.io/cbade_cs/openshift-demo:sock-shop-shipping
-          imagePullPolicy: Always #IfNotPresent
+          imagePullPolicy: IfNotPresent #IfNotPresent
           command: [ "/usr/bin/java" ]
           args: [ "-cp", "/opt/app.jar", "-Dloader.path=/opt/lib", "org.springframework.boot.loader.PropertiesLauncher", "--port=8080" ]
           env:

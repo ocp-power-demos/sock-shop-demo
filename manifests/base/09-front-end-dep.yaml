@@ -17,7 +17,7 @@ spec:
       containers:
         - name: front-end
           image: quay.io/powercloud/sock-shop-front-end:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/bin/npm" ]
           args: [ "start" ]
           resources:
