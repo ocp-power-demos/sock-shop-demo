@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:3.11.19-management
+          image: quay.io/powercloud/rabbitmq:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 15672

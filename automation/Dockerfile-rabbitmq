@@ -1,0 +1,49 @@
+# Link https://github.com/redhat-cop/containers-quickstarts/blob/main/rabbitmq/Dockerfile
+# Based on redhat-cop's rabbitmq image
+# podman buildx build -f automation/Dockerfile-rabbitmq --all-platforms --manifest quay.io/powercloud/rabbitmq:latest
+
+FROM registry.fedoraproject.org/fedora-minimal:40
+
+ARG ERLANG_VERSION=24.0.5
+ARG RABBITMQ_AUTOCLUSTER_VERSION=0.10.0
+ARG RABBITMQ_VERSION=3.8.22
+
+ARG INSTALL_PKGS="\
+    hostname \
+    systemd \
+    tar \
+    xz \
+    rabbitmq-server"
+
+LABEL io.k8s.description="Lightweight open source message broker" \
+      io.k8s.display-name="RabbitMQ" \
+      io.openshift.expose-services="4369:epmd, 5671:amqp, 5672:amqp, 25672:http" \
+      io.openshift.tags="rabbitmq"
+
+ENV GPG_KEY=0x0A9AF2115F4687BD29803A206B73A36E6026DFCA \
+    HOME=/var/lib/rabbitmq \
+    RABBITMQ_HOME=/opt/rabbitmq \
+    RABBITMQ_LOGS=- \
+    RABBITMQ_SASL_LOGS=- \
+    LANG=C.UTF-8 \
+    LANGUAGE=C.UTF-8 \
+    LC_ALL=C.UTF-8
+
+RUN set -xe && \
+    microdnf search rabbitmq && \
+    microdnf install ${INSTALL_PKGS} -y && \
+    microdnf update -y && \
+    mkdir -p /var/lib/rabbitmq /etc/rabbitmq && \
+    mkdir -p /opt/rabbitmq/plugins && \
+    chown -R 1001:0 /var/lib/rabbitmq /etc/rabbitmq ${RABBITMQ_HOME}/plugins && \
+    chmod -R g=u /var/lib/rabbitmq /etc/rabbitmq && \
+    ln -sf "$RABBITMQ_HOME/plugins" /plugins && \
+    rm -rf /var/cache/yum
+
+RUN curl -o /usr/local/bin/docker-entrypoint.sh -L https://raw.githubusercontent.com/redhat-cop/containers-quickstarts/refs/heads/main/rabbitmq/docker-entrypoint.sh
+USER 1001
+ENV PATH=$RABBITMQ_HOME/sbin:$PATH
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 5672 25672
+CMD ["rabbitmq-server"]
