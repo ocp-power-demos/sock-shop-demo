@@ -22,8 +22,8 @@ spec:
         - name: rabbitmq
           image: quay.io/powercloud/rabbitmq:latest
           imagePullPolicy: IfNotPresent
-          command: ["usr/bin/bash"]
-          args: ["-c", "/usr/local/bin/docker-entrypoint.sh"]
+          command: ["/usr/bin/bash"]
+          args: ["/usr/local/bin/docker-entrypoint.sh", "rabbitmq-server"]
           ports:
             - containerPort: 15672
               name: management
