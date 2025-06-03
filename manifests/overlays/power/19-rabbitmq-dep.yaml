@@ -37,5 +37,5 @@ spec:
             - containerPort: 9090
               name: exporter
       nodeSelector:
-        node.openshift.io/os_id: rhcos
+        node-role.kubernetes.io/worker: ""
         kubernetes.io/arch: ppc64le

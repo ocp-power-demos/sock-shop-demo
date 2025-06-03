@@ -36,5 +36,5 @@ spec:
           persistentVolumeClaim:
             claimName: user-db-temp-pvc
       nodeSelector:
-        node.openshift.io/os_id: rhcos
+        node-role.kubernetes.io/worker: ""
         kubernetes.io/arch: amd64

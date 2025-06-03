@@ -38,4 +38,4 @@ spec:
             medium: Memory
       nodeSelector:
         kubernetes.io/arch: amd64
-        node.openshift.io/os_id: rhcos
+        node-role.kubernetes.io/worker: ""

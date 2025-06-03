@@ -53,4 +53,4 @@ spec:
             initialDelaySeconds: 180
             periodSeconds: 3
       nodeSelector:
-        node.openshift.io/os_id: rhcos
+        node-role.kubernetes.io/worker: ""

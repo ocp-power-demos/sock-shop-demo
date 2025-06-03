@@ -34,4 +34,4 @@ spec:
           ports:
             - containerPort: 8080
       nodeSelector:
-        node.openshift.io/os_id: rhcos
+        node-role.kubernetes.io/worker: ""
